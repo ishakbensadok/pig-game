@@ -51,7 +51,7 @@ const resetAll = function () {
 /* ----------------------- EVENTS --------------------------------------------- */
 /* ****** button roll dice event ****** */
 btnRollDice.addEventListener('click', function () {
-  if (totalScore >= 20) return;
+  if (totalScore >= 100) return;
   dice.classList.remove('hidden'); /* make the dice visible */
   const SecretDiceResult = SecretDice();
   dice.src = `dice-${SecretDiceResult}.png`;
@@ -64,8 +64,8 @@ btnRollDice.addEventListener('click', function () {
 });
 /* ****** button  Hold event ****** */
 btnHold.addEventListener('click', function () {
-  if (totalScore < 20) totalScore += Score;
-  if (totalScore < 20) {
+  if (totalScore < 100) totalScore += Score;
+  if (totalScore < 100) {
     PlayerTotalScore.textContent = totalScore;
     switchPlayer();
   } else {
