@@ -164,7 +164,6 @@ button {
   position: relative;
   backdrop-filter: blur(20px);
 }
-
 .winner {
   background-color: #333;
   position: relative;
@@ -172,6 +171,7 @@ button {
 .winner .player__name {
   color: rgb(199, 54, 95);
 }
+
 .winner::after {
   position: absolute;
   content: 'Winner🥇';
@@ -203,7 +203,7 @@ button {
   z-index: -1;
 }
 
-.player__total-score {
+.total-score {
   font-size: 5rem;
   color: rgb(199, 54, 95);
 }
@@ -249,7 +249,7 @@ button {
 
     font-size: 1.7rem;
   }
-  .player__total-score {
+  .total-score {
     font-size: 8rem;
   }
   .player__name {
