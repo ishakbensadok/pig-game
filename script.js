@@ -8,42 +8,30 @@ const dice = document.querySelector('.dice');
 let totalScore = 0;
 let Score = 0;
 let currPlayer = 1;
-/* ********************************************************** */
+let playing = true;
 let Player = document.querySelector('.player-1');
-let PlayerCurrentScore = document.querySelector('.current-score-1');
-let PlayerTotalScore = document.querySelector('.total-score-1');
-
-/* implementing random dice */
-const SecretDice = function () {
-  return Math.trunc(Math.random() * 6 + 1);
-};
 /* ----------------------- Functions --------------------------------------------- */
-const currentPlayerStateChange = function () {
-  currPlayer = currPlayer === 1 ? 2 : 1;
-  Player = document.querySelector(`.player-${currPlayer}`);
-  PlayerCurrentScore = document.querySelector(`.current-score-${currPlayer}`);
-  PlayerTotalScore = document.querySelector(`.total-score-${currPlayer}`);
-};
 const switchPlayer = function () {
   Score = 0;
-  PlayerCurrentScore.textContent = Score;
+  Player.querySelector('.current-score').textContent = Score;
   Player.classList.remove('current-player');
-  currentPlayerStateChange();
+  currPlayer = currPlayer === 1 ? 2 : 1;
+  Player = document.querySelector(`.player-${currPlayer}`);
   Player.classList.add('current-player');
-  totalScore = Number(PlayerTotalScore.textContent);
+  totalScore = Number(Player.querySelector('.total-score').textContent);
 };
 const resetAll = function () {
   Score = 0;
   totalScore = 0;
+  playing = true;
   dice.classList.add('hidden');
   Player.classList.remove('winner');
-  if (currPlayer !== 1) {
-    Player.classList.remove('current-player');
-    currentPlayerStateChange();
-    Player.classList.add('current-player');
-  }
+  Player.classList.remove('current-player');
+  currPlayer = 1;
+  Player = document.querySelector(`.player-${currPlayer}`);
+  Player.classList.add('current-player');
   // rest totalscores & current scores
-  let temp = document.querySelectorAll('.player__total-score');
+  let temp = document.querySelectorAll('.total-score');
   for (let i = 0; i < temp.length; i++) temp[i].textContent = totalScore;
   temp = document.querySelectorAll('.current-score');
   for (let i = 0; i < temp.length; i++) temp[i].textContent = Score;
@@ -51,28 +39,30 @@ const resetAll = function () {
 /* ----------------------- EVENTS --------------------------------------------- */
 /* ****** button roll dice event ****** */
 btnRollDice.addEventListener('click', function () {
-  if (totalScore >= 100) return;
-  dice.classList.remove('hidden'); /* make the dice visible */
-  const SecretDiceResult = SecretDice();
-  dice.src = `dice-${SecretDiceResult}.png`;
-  if (SecretDiceResult !== 1) {
-    Score += SecretDiceResult;
-    PlayerCurrentScore.textContent = Score;
-  } else {
-    switchPlayer();
+  if (playing) {
+    dice.classList.remove('hidden'); /* make the dice visible */
+    const SecretDice = Math.trunc(Math.random() * 6 + 1);
+    dice.src = `dice-${SecretDice}.png`;
+    if (SecretDice !== 1) {
+      Score += SecretDice;
+      Player.querySelector('.current-score').textContent = Score;
+    } else switchPlayer();
   }
 });
 /* ****** button  Hold event ****** */
 btnHold.addEventListener('click', function () {
-  if (totalScore < 100) totalScore += Score;
-  if (totalScore < 100) {
-    PlayerTotalScore.textContent = totalScore;
-    switchPlayer();
-  } else {
-    PlayerTotalScore.textContent = totalScore;
-    dice.classList.add('hidden');
-    Player.classList.add('winner');
+  if (playing) {
+    totalScore += Score;
+    Player.querySelector('.total-score').textContent = totalScore;
+    if (totalScore < 100) switchPlayer();
+    else {
+      dice.classList.add('hidden');
+      Player.classList.add('winner');
+      Player.classList.remove('current-player');
+      playing = false;
+    }
   }
 });
 /* button new game event ;;*/
 btnNewGame.addEventListener('click', resetAll);
+
